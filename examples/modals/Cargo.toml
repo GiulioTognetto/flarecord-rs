@@ -16,3 +16,4 @@ worker-macros = { version = "0.8" }
 async-trait = "0.1.89"
 
 flarecord = { path = "../../" }
+twilight-model = { version = "0.17", default-features = false }

@@ -47,7 +47,7 @@ impl TryFrom<Interaction> for ModalInteraction {
     fn try_from(mut value: Interaction) -> Result<Self, Self::Error> {
         let data = match value.data.take() {
             Some(InteractionData::ModalSubmit(d)) => ModalData::from(*d),
-            _ => return Err(Error::Generic("Expected ApplicationCommand".into())),
+            _ => return Err(Error::Generic("Expected ModalSubmit interaction".into())),
         };
 
         Ok(Self {
@@ -58,7 +58,7 @@ impl TryFrom<Interaction> for ModalInteraction {
             entitlements: std::mem::take(&mut value.entitlements),
             guild: value.guild.take(),
             guild_locale: value.guild_locale.take(),
-            locale: value.locale.take().expect("Locale should be always available"),
+            locale: value.locale.take().unwrap_or_else(|| "en-US".into()),
             data: data,
             id: value.id,
             token: std::mem::take(&mut value.token),

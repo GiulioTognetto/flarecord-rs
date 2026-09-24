@@ -7,7 +7,7 @@ use twilight_model::{
             component::{
                 SelectDefaultValue, 
                 SelectMenu as TwilightSelectMenu, 
-                SelectMenuType
+                SelectMenuType, SelectMenuOption
             }
         }
     }, 
@@ -22,7 +22,7 @@ use twilight_model::{
     }
 };
 
-use crate::{error::BotResult, models::{components::{id::IdAssignable, interaction::ComponentInteraction, interactive::{Handler, InteractiveComponentHandler}}, context::InteractionContext}, traits::component::IntoTwilight};
+use crate::{error::BotResult, models::{command::response::CommandResponse, components::{id::IdAssignable, interaction::ComponentInteraction, interactive::{Handler, InteractiveComponentHandler}}, context::InteractionContext}, traits::component::IntoTwilight};
 
 pub enum Select {
     String(SelectKind<String>),
@@ -33,7 +33,7 @@ pub enum Select {
 }
 
 impl Select {
-    pub (crate) async fn selected(&self, interaction: ComponentInteraction, ctx: InteractionContext) -> BotResult<()> {
+    pub (crate) async fn selected(&self, interaction: ComponentInteraction, ctx: InteractionContext) -> BotResult<CommandResponse> {
         match self {
             Self::String(select) => select.selected(interaction, ctx).await,
             Self::Channel(select) => select.selected(interaction, ctx).await,
@@ -108,20 +108,35 @@ impl SelectKind<Id<ChannelMarker>> {
 }
 
 impl<T> SelectKind<T> {
+    /// Sets the developer-defined identifier. This is required for modal selects.
+    pub fn custom_id(mut self, custom_id: impl Into<String>) -> Self {
+        self.inner.custom_id = custom_id.into();
+        self
+    }
+
+    pub fn option(mut self, option: SelectMenuOption) -> Self {
+        self.inner.options.get_or_insert_default().push(option);
+        self
+    }
+
+    pub fn options(mut self, options: Vec<SelectMenuOption>) -> Self {
+        self.inner.options = Some(options);
+        self
+    }
     pub fn on_select<F, Fut>(mut self, handler: F) -> Self 
     where 
         F: Fn(ComponentInteraction, InteractionContext) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = BotResult<()>> + 'static,
+        Fut: Future<Output = BotResult<CommandResponse>> + 'static,
     {
         self.handler = Some(Box::new(Handler(handler)));
         self
     }
 
-    pub (crate) async fn selected(&self, interaction: ComponentInteraction, ctx: InteractionContext) -> BotResult<()> {
+    pub (crate) async fn selected(&self, interaction: ComponentInteraction, ctx: InteractionContext) -> BotResult<CommandResponse> {
         if let Some(handler) = &self.handler {
             return handler.handle(interaction, ctx).await;
         } else {
-            Ok(())
+            Ok(CommandResponse::empty())
         }
     }
 
@@ -148,6 +163,12 @@ impl<T> SelectKind<T> {
     pub fn disabled(mut self, disabled: bool) -> Self {
         self.inner.disabled = disabled;
         self
+    }
+
+    /// Converts this select configuration into a modal component, preserving
+    /// the same options and constraints used by message components.
+    pub fn into_modal(self) -> crate::models::modals::ModalComponent {
+        crate::models::modals::ModalComponent::Select(self.into_twilight())
     }
 }
 
@@ -240,4 +261,7 @@ impl IntoTwilight<TwilightSelectMenu> for Select {
             Self::Mentionable(select) => select.into_twilight()
         }
     }
+}
+impl<T> From<SelectKind<T>> for crate::models::modals::ModalComponent {
+    fn from(value: SelectKind<T>) -> Self { Self::Select(value.into_twilight()) }
 }

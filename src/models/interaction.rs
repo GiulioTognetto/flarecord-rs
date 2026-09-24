@@ -106,7 +106,12 @@ impl Interaction {
         let ctx = InteractionContext::new(bot_state, env)?;
 
         match modal.on_submit(modal_interaction, ctx).await {
-            Ok(response) => Ok(Response::empty()?),
+            Ok(response) => {
+                let value = serde_json::to_value(response.into_twilight())
+                    .map_err(Error::JsonFailed)?;
+
+                Response::from_json(&value).map_err(Error::WorkerError)
+            },
             Err(e) => Ok(e.as_response()?)
         }
     }

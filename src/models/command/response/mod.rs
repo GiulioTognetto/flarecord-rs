@@ -9,6 +9,7 @@ use twilight_model::{
     http::{
         interaction::{
             InteractionResponse as TwilightCommandResponse,
+            InteractionResponseData,
             InteractionResponseType
         }
     }
@@ -59,6 +60,23 @@ impl CommandResponse {
         Self(TwilightCommandResponse {
             kind: InteractionResponseType::ChannelMessageWithSource,
             data: None
+        })
+    }
+
+    pub fn modal<M: crate::models::modals::Modal>(modal: M) -> Self {
+        let mut root = crate::models::modals::RootModal::new();
+        modal.build(&mut root);
+
+        let components = root.into_components();
+
+        Self(TwilightCommandResponse {
+            kind: InteractionResponseType::Modal,
+            data: Some(InteractionResponseData {
+                custom_id: Some(modal.id()),
+                components: Some(components),
+                title: Some(modal.title()),
+                ..Default::default()
+            }),
         })
     }
 

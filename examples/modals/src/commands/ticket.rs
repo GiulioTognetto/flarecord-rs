@@ -14,11 +14,7 @@ impl Command for Ticket {
         "A command that return a modal".into()
     }
 
-    async fn execute(&self, _interaction: CommandInteraction, _ctx: InteractionContext) ->BotResult<CommandResponse> {
-
-        let response = CommandResponse::builder()
-            .build();
-
-        Ok(response)
+    async fn execute(&self, interaction: CommandInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
+        Ok(CommandResponse::modal(crate::modals::ticket::TicketModal {}))
     }
 }
