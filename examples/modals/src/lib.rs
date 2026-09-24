@@ -11,7 +11,7 @@ static BOT: LazyLock<Arc<Bot>> = LazyLock::new(|| {
     BotBuilder::new()
         .enable_default_commands()
         .register_command(commands::ticket::Ticket)
-        .register_modal(modals::ticket::TicketModal {})
+        .register_modal(modals::ticket::TicketModal)
         .build()
 });
 

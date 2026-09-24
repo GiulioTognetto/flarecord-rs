@@ -17,6 +17,7 @@ pub mod data;
 pub mod root;
 pub mod layout;
 pub mod interactive;
+pub mod modal;
 
 pub use root::RootComponent;
 

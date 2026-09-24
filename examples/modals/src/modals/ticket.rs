@@ -1,8 +1,7 @@
-use flarecord::prelude::*;
+use flarecord::{models::components::content::text_display::TextDisplay, prelude::*};
 use twilight_model::channel::message::component::SelectMenuOption;
 
-pub struct TicketModal {
-}
+pub struct TicketModal;
 
 impl Modal for TicketModal {
     fn name(&self) -> String {
@@ -14,19 +13,12 @@ impl Modal for TicketModal {
     }
 
     fn build(&self, root: &mut RootModal) {
-        root.add(
-            TextInput::new("subject", "Subject")
-                .required(true),
-        );
-        root.add(
-            TextInput::new("description", "Description")
-                .style(TextInputStyle::Paragraph)
-                .required(true),
-        );
-        root.add(
-            Select::string()
-                .custom_id("priority")
-                .placeholder("Select a priority")
+        let subject = TextInput::new("subject", "Subject");
+        let description = TextInput::new("description", "Description");
+
+        let proirity = ModalSelect::string()
+            .custom_id("priority")
+            .placeholder("Select a priority")
                 .option(SelectMenuOption {
                     label: "Normal".into(),
                     value: "normal".into(),
@@ -49,17 +41,15 @@ impl Modal for TicketModal {
                     emoji: None,
                 })
                 .required(true)
-                .build(),
-        );
+                .build();
+
+        root.add(subject);
+        root.add(description);
+        root.add(proirity);
     }
 
     async fn on_submit(&self, interaction: ModalInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
-        let subject = interaction.data.text("subject").unwrap_or_default();
-        let description = interaction.data.text("description").unwrap_or_default();
-        let priority = interaction.data.select_values("priority")
-            .map(|values| values.join(", ")).unwrap_or_else(|| "normal".into());
-        Ok(CommandResponse::builder()
-            .content(format!("Ticket received ({priority}): {subject}\n{description}"))
-            .build())
+
+        Ok(CommandResponse::empty())
     }
 }

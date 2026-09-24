@@ -3,16 +3,18 @@ use twilight_model::channel::message::component::{
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TextInputStyle {
+pub enum TextStyle {
     Short,
     Paragraph,
 }
 
-impl From<TextInputStyle> for TwilightTextInputStyle {
-    fn from(value: TextInputStyle) -> Self {
+pub type TextInputStyle = TextStyle;
+
+impl From<TextStyle> for TwilightTextInputStyle {
+    fn from(value: TextStyle) -> Self {
         match value {
-            TextInputStyle::Short => Self::Short,
-            TextInputStyle::Paragraph => Self::Paragraph,
+            TextStyle::Short => Self::Short,
+            TextStyle::Paragraph => Self::Paragraph,
         }
     }
 }
@@ -21,7 +23,7 @@ impl From<TextInputStyle> for TwilightTextInputStyle {
 pub struct TextInput {
     custom_id: String,
     label: String,
-    style: TextInputStyle,
+    style: TextStyle,
     placeholder: Option<String>,
     value: Option<String>,
     min_length: Option<u16>,
@@ -34,7 +36,7 @@ impl TextInput {
         Self {
             custom_id: custom_id.into(),
             label: label.into(),
-            style: TextInputStyle::Short,
+            style: TextStyle::Short,
             placeholder: None,
             value: None,
             min_length: None,
@@ -44,18 +46,18 @@ impl TextInput {
     }
 
     pub fn try_new(custom_id: impl Into<String>, label: impl Into<String>) -> Result<Self, String> {
-            let custom_id = custom_id.into();
-            let label = label.into();
-            if custom_id.is_empty() || custom_id.len() > 100 {
-                return Err("modal text input custom_id must contain 1..=100 characters".into());
-            }
-            if label.is_empty() || label.chars().count() > 45 {
-                return Err("modal text input label must contain 1..=45 characters".into());
-            }
-            Ok(Self::new(custom_id, label))
+        let custom_id = custom_id.into();
+        let label = label.into();
+        if custom_id.is_empty() || custom_id.len() > 100 {
+            return Err("modal text input custom_id must contain 1..=100 characters".into());
+        }
+        if label.is_empty() || label.chars().count() > 45 {
+            return Err("modal text input label must contain 1..=45 characters".into());
+        }
+        Ok(Self::new(custom_id, label))
     }
 
-    pub fn style(mut self, style: TextInputStyle) -> Self {
+    pub fn style(mut self, style: TextStyle) -> Self {
         self.style = style;
         self
     }
@@ -81,7 +83,9 @@ impl TextInput {
     }
 
     pub fn try_min_length(self, min_length: u16) -> Result<Self, String> {
-        if min_length > 4000 { return Err("min_length must be <= 4000".into()); }
+        if min_length > 4000 {
+            return Err("min_length must be <= 4000".into());
+        }
         if self.max_length.is_some_and(|max| min_length > max) {
             return Err("min_length cannot exceed max_length".into());
         }
@@ -89,7 +93,9 @@ impl TextInput {
     }
 
     pub fn try_max_length(self, max_length: u16) -> Result<Self, String> {
-        if !(1..=4000).contains(&max_length) { return Err("max_length must be between 1 and 4000".into()); }
+        if !(1..=4000).contains(&max_length) {
+            return Err("max_length must be between 1 and 4000".into());
+        }
         if self.min_length.is_some_and(|min| min > max_length) {
             return Err("max_length cannot be less than min_length".into());
         }

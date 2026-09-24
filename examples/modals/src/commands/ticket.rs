@@ -15,6 +15,6 @@ impl Command for Ticket {
     }
 
     async fn execute(&self, interaction: CommandInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
-        Ok(CommandResponse::modal(crate::modals::ticket::TicketModal {}))
+        Ok(CommandResponse::modal(crate::modals::ticket::TicketModal))
     }
 }

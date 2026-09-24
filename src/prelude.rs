@@ -25,13 +25,15 @@ pub use crate::models::components::interactive::{
     button::{Button, ButtonKind, ButtonStyle},
     select::{Select, SelectKind},
 };
+pub use crate::models::components::modal::{
+    FileUpload, Label, ModalSelect, TextDisplay, TextInput, TextInputStyle, TextStyle,
+};
 pub use crate::models::modals::{
     Modal,
     ModalComponent,
     RootModal,
     interaction::ModalInteraction,
     data::ModalData,
-    input::{TextInput, TextInputStyle},
 };
 pub use crate::models::attachment::{builder::AttachmentBuilder, outgoing::Attachment};
 pub use crate::models::user::{User, UserRef, UserTrait};

@@ -1,6 +1,5 @@
 pub mod button;
 pub mod select;
-pub mod text_input;
 
 use std::pin::Pin;
 use std::future::Future;

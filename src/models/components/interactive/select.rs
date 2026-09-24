@@ -165,11 +165,6 @@ impl<T> SelectKind<T> {
         self
     }
 
-    /// Converts this select configuration into a modal component, preserving
-    /// the same options and constraints used by message components.
-    pub fn into_modal(self) -> crate::models::modals::ModalComponent {
-        crate::models::modals::ModalComponent::Select(self.into_twilight())
-    }
 }
 
 macro_rules! impl_default_values {
@@ -261,7 +256,4 @@ impl IntoTwilight<TwilightSelectMenu> for Select {
             Self::Mentionable(select) => select.into_twilight()
         }
     }
-}
-impl<T> From<SelectKind<T>> for crate::models::modals::ModalComponent {
-    fn from(value: SelectKind<T>) -> Self { Self::Select(value.into_twilight()) }
 }

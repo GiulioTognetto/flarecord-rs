@@ -96,6 +96,7 @@ impl Interaction {
     /// Handler per ModalSubmit (modal interactions)
     async fn handle_modal_submit(self, env: Env, token: &str) -> BotResult<Response> {
         let modal_interaction = ModalInteraction::try_from(self)?;
+        let response_state = modal_interaction.response_state();
 
         let bot = Bot::get_global();
         let Some(modal) = bot.modals.get(&modal_interaction.data.custom_id) else {
@@ -107,6 +108,10 @@ impl Interaction {
 
         match modal.on_submit(modal_interaction, ctx).await {
             Ok(response) => {
+                if response_state.load(std::sync::atomic::Ordering::Acquire) {
+                    return Ok(Response::empty()?);
+                }
+
                 let value = serde_json::to_value(response.into_twilight())
                     .map_err(Error::JsonFailed)?;
 

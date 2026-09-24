@@ -1,14 +1,16 @@
-use twilight_model::channel::message::{Component, component::{Label, SelectMenu}};
-use super::input::TextInput;
+use twilight_model::channel::message::Component;
+
 use crate::{
-    models::components::interactive::select::Select,
+    models::components::modal::{FileUpload, Label, ModalSelect, TextDisplay, TextInput},
     traits::component::IntoTwilight,
 };
 
 pub enum ModalComponent {
     TextInput(TextInput),
-    Select(SelectMenu),
-    Label { label: String, description: Option<String>, component: Box<ModalComponent> },
+    Select(ModalSelect),
+    Label(Label),
+    TextDisplay(TextDisplay),
+    FileUpload(FileUpload),
 }
 
 pub struct RootModal {
@@ -27,30 +29,41 @@ impl RootModal {
     pub(crate) fn into_components(self) -> Vec<Component> {
         self.components.into_iter().map(Into::into).collect()
     }
+
 }
 
 impl From<TextInput> for ModalComponent {
     fn from(value: TextInput) -> Self { Self::TextInput(value) }
 }
 
-impl From<SelectMenu> for ModalComponent {
-    fn from(value: SelectMenu) -> Self { Self::Select(value) }
+impl From<ModalSelect> for ModalComponent {
+    fn from(value: ModalSelect) -> Self { Self::Select(value) }
 }
 
-impl From<Select> for ModalComponent {
-    fn from(value: Select) -> Self {
-        Self::Select(value.into_twilight())
-    }
+impl From<Label> for ModalComponent {
+    fn from(value: Label) -> Self { Self::Label(value) }
+}
+
+impl From<TextDisplay> for ModalComponent {
+    fn from(value: TextDisplay) -> Self { Self::TextDisplay(value) }
+}
+
+impl From<FileUpload> for ModalComponent {
+    fn from(value: FileUpload) -> Self { Self::FileUpload(value) }
 }
 
 impl From<ModalComponent> for Component {
     fn from(value: ModalComponent) -> Self {
         match value {
             ModalComponent::TextInput(input) => Component::TextInput(input.into_twilight()),
-            ModalComponent::Select(select) => Component::SelectMenu(select),
-            ModalComponent::Label { label, description, component } => Component::Label(Label {
-                id: None, label, description, component: Box::new((*component).into()),
-            }),
+            ModalComponent::Select(select) => Component::SelectMenu(select.into_twilight()),
+            ModalComponent::Label(label) => label.into_twilight(),
+            ModalComponent::TextDisplay(text_display) => {
+                Component::TextDisplay(text_display.into_twilight())
+            }
+            ModalComponent::FileUpload(file_upload) => {
+                Component::FileUpload(file_upload.into_twilight())
+            }
         }
     }
 }

@@ -17,11 +17,12 @@ use crate::{
 };
 
 pub mod data;
-pub mod input;
 pub mod interaction;
 pub mod root;
 
-pub use input::{TextInput, TextInputStyle};
+pub use crate::models::components::modal::{
+    FileUpload, Label, ModalSelect, TextDisplay, TextInput, TextInputStyle, TextStyle,
+};
 pub use root::{ModalComponent, RootModal};
 
 pub type ModalType = Arc<DynModal<'static>>;
