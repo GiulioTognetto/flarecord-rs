@@ -169,13 +169,12 @@ fn find_component<'a>(
             {
                 Some(component)
             }
-            ModalInteractionComponent::Label(label) => {
-                find_component(std::slice::from_ref(label.component.as_ref()), custom_id)
+            ModalInteractionComponent::FileUpload(file_upload)
+                if file_upload.custom_id == custom_id =>
+            {
+                Some(component)
             }
-            ModalInteractionComponent::ActionRow(row) => {
-                find_component(&row.components, custom_id)
-            }
-            _ => None,
+            _ => None
         };
 
         if found.is_some() {
