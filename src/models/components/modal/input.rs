@@ -48,7 +48,7 @@ impl TextInput {
     pub fn try_new(custom_id: impl Into<String>, label: impl Into<String>) -> Result<Self, String> {
         let custom_id = custom_id.into();
         let label = label.into();
-        if custom_id.is_empty() || custom_id.len() > 100 {
+        if custom_id.is_empty() || custom_id.chars().count() > 100 {
             return Err("modal text input custom_id must contain 1..=100 characters".into());
         }
         if label.is_empty() || label.chars().count() > 45 {
