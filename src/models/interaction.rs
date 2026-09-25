@@ -117,7 +117,12 @@ impl Interaction {
 
                 Response::from_json(&value).map_err(Error::WorkerError)
             },
-            Err(e) => Ok(e.as_response()?)
+Err(e) => {
+                if response_state.load(std::sync::atomic::Ordering::Acquire) {
+                    return Ok(Response::empty()?);
+                }
+                Ok(e.as_response()?)
+            }
         }
     }
 
