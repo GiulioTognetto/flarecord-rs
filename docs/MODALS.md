@@ -13,16 +13,17 @@ impl Modal for Ticket {
     fn description(&self) -> String { "Open a ticket".into() }
 
     fn build(&self, root: &mut RootModal) {
-        root.label("Subject", TextInput::new("subject", "Subject"));
-        root.label("Details", TextInput::new("details", "Details")
-            .style(TextInputStyle::Paragraph));
-        root.label("Priority", Select::string().custom_id("priority"));
-    }
+        root.add(Label::new("Subject", TextInput::new("subject", "Subject")));
+        root.add(Label::new(
+            "Details",
+            TextInput::new("details", "Details").style(TextInputStyle::Paragraph),
+        ));
+        root.add(Label::new("Priority", ModalSelect::string().custom_id("priority")));
 
     async fn on_submit(&self, interaction: ModalInteraction,
         _ctx: InteractionContext) -> BotResult<CommandResponse> {
-        let subject = interaction.data.text("subject").unwrap_or_default();
-        let priorities = interaction.data.select_values("priority").unwrap_or_default();
+        let subject = interaction.data.get_text_input("subject").unwrap_or_default();
+        let priorities = interaction.data.get_select_values("priority").unwrap_or_default();
         Ok(CommandResponse::builder()
             .content(format!("{subject}: {priorities:?}"))
             .build())
