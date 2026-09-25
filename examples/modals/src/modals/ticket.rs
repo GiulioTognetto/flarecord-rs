@@ -43,9 +43,9 @@ impl Modal for TicketModal {
                 .required(true)
                 .build();
 
-        root.add(subject);
-        root.add(description);
-        root.add(proirity);
+        root.add(Label::new("Subject", subject));
+        root.add(Label::new("Description", description));
+        root.add(Label::new("Priority", proirity));
     }
 
     async fn on_submit(&self, interaction: ModalInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {

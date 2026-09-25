@@ -19,6 +19,11 @@ impl ModalSelect {
     pub fn channel() -> Self { Self::new(SelectMenuType::Channel) }
 
     fn new(kind: SelectMenuType) -> Self {
+        let options = match &kind {
+            SelectMenuType::Text => Some(Vec::new()),
+            _ => None,
+        };
+
         Self {
             inner: TwilightSelectMenu {
                 id: None,
@@ -29,7 +34,7 @@ impl ModalSelect {
                 kind,
                 max_values: None,
                 min_values: None,
-                options: Some(Vec::new()),
+                options,
                 placeholder: None,
                 required: None,
             },
