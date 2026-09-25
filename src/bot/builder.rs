@@ -45,8 +45,8 @@ impl BotBuilder {
 
     pub fn register_modal<T: Modal + 'static>(mut self, modal: T) -> Self {
         let modal = modal.into_modal();
-        //let modal_id = get_id_from_type_id(modal.type_id());
-        self.modals.insert(modal.name(), modal);
+        let modal_id = get_id_from_type_id(modal.type_id());
+        self.modals.insert(modal_id, modal);
         self
     }
 

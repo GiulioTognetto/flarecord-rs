@@ -45,10 +45,6 @@ pub trait Modal: Send + Sync {
         vec![]
     }
 
-    fn id(&self) -> String {
-        self.name()
-    }
-
     fn title(&self) -> String {
         self.description()
     }

@@ -63,16 +63,18 @@ impl CommandResponse {
         })
     }
 
-    pub fn modal<M: crate::models::modals::Modal>(modal: M) -> Self {
+    pub fn modal<M: crate::models::modals::Modal + 'static>(modal: M) -> Self {
         let mut root = crate::models::modals::RootModal::new();
         modal.build(&mut root);
 
         let components = root.into_components();
 
+        let modal_id = get_id_from_type_id(modal.type_id());
+
         Self(TwilightCommandResponse {
             kind: InteractionResponseType::Modal,
             data: Some(InteractionResponseData {
-                custom_id: Some(modal.id()),
+                custom_id: Some(modal_id),
                 components: Some(components),
                 title: Some(modal.title()),
                 ..Default::default()
