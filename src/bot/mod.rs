@@ -6,7 +6,7 @@ use twilight_model::application::interaction::Interaction as TwilightInteraction
 use worker::{Env, Method, Request, Response};
 
 use crate::bot::builder::BotBuilder;
-use crate::crypto;
+use crate::signature;
 use crate::models::command::CommandType;
 use crate::models::components::ComponentType;
 use crate::models::interaction::Interaction;
@@ -42,7 +42,7 @@ impl Bot {
 
     pub fn new() -> Arc<Bot> {
         let mut builder = BotBuilder::new();
-        builder = builder.enable_bot_commands();
+        builder = builder.enable_default_commands();
         builder.build()
     }
 
@@ -54,7 +54,7 @@ impl Bot {
             .map_err(|e| Error::EnvironmentVariableNotFound(format!("{e}")))?
             .to_string();
     
-        let is_valid = match crypto::verify_signature(headers, &body, &public_key) {
+        let is_valid = match signature::verify_signature(headers, &body, &public_key) {
             Err(e) => return e.as_response(),
             Ok(value) => value
         };

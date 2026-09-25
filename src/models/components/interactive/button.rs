@@ -12,7 +12,7 @@ use twilight_model::{
     }
 };
 
-use crate::{error::BotResult, models::{components::{context::ComponentContext, id::IdAssignable, interaction::ComponentInteraction, interactive::{BoxFuture, Handler, InteractiveComponentHandler}}}, traits::component::IntoTwilight};
+use crate::{error::BotResult, models::{command::response::CommandResponse, components::{id::IdAssignable, interaction::ComponentInteraction, interactive::{Handler, InteractiveComponentHandler}}, context::InteractionContext}, traits::component::IntoTwilight};
 
 
 pub enum ButtonStyle {
@@ -115,18 +115,18 @@ impl ButtonKind<Normal> {
     /// If is not specified an `on_click` method the interaction is sent to the base Component
     pub fn on_click<F, Fut>(mut self, handler: F) -> Self
     where 
-        F: Fn(ComponentInteraction, ComponentContext) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = BotResult<()>> + 'static,
+        F: Fn(ComponentInteraction, InteractionContext) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = BotResult<CommandResponse>> + 'static,
     {
         self.handler = Some(Box::new(Handler(handler)));
         self
     }
 
-    pub (crate) async fn clicked(&self, interaction: ComponentInteraction, ctx: ComponentContext) -> BotResult<()> {
+    pub (crate) async fn clicked(&self, interaction: ComponentInteraction, ctx: InteractionContext) -> BotResult<CommandResponse> {
         if let Some(handler) = &self.handler {
             return handler.handle(interaction, ctx).await;
         } else {
-            Ok(())
+            Ok(CommandResponse::empty())
         }
     } 
 }

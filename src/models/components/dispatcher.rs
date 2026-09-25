@@ -1,4 +1,4 @@
-use crate::{bot::Bot, error::{BotResult, Error}, models::{command::{Command, response::CommandResponse}, components::{Component, ComponentType, context::ComponentContext, interaction::ComponentInteraction, interactive::button::Button, layout::{LayoutComponent, RootComponent, action_row::{ActionRow, ActionRowChild}, container::{Container, ContainerChild}, section::{Section, SectionAccessory}}}}};
+use crate::{error::{BotResult, Error}, models::{command::response::CommandResponse, components::{Component, ComponentType, interaction::ComponentInteraction, interactive::button::Button, layout::{LayoutComponent, RootComponent, action_row::{ActionRow, ActionRowChild}, container::{Container, ContainerChild}, section::{Section, SectionAccessory}}}, context::InteractionContext}};
 
 
 pub (crate) struct ComponentDispatcher;
@@ -21,7 +21,7 @@ impl ComponentDispatcher {
     pub (crate) async fn dispatch(
         component: &ComponentType, 
         interaction: ComponentInteraction, 
-        ctx: ComponentContext
+        ctx: InteractionContext
     ) -> BotResult<CommandResponse> {
         let custom_id = interaction.data.custom_id.clone();
 
@@ -53,7 +53,7 @@ impl ComponentDispatcher {
     pub (crate) async fn dispatch_layout(
         layout: &LayoutComponent,
         interaction: ComponentInteraction, 
-        ctx: ComponentContext,
+        ctx: InteractionContext,
         path: &str
     ) -> BotResult<CommandResponse> {
         match layout {
@@ -75,18 +75,16 @@ impl ComponentDispatcher {
                 ctx, 
                 path
             ).await,
-            _ => Ok(())
-        };
-
-        Ok(CommandResponse::empty())
+            _ => Ok(CommandResponse::empty())
+        }
     }
 
     pub (crate) async fn dispatch_action_row(
         action_row: &ActionRow,
         interaction: ComponentInteraction, 
-        ctx: ComponentContext,
+        ctx: InteractionContext,
         path: &str
-    ) -> BotResult<()> {
+    ) -> BotResult<CommandResponse> {
         let (child_id, path) = get_next_child(&path)?;
 
         for child in action_row.get_children() {
@@ -115,15 +113,15 @@ impl ComponentDispatcher {
             }
         }
 
-        Ok(())
+        Ok(CommandResponse::empty())
     }
 
     pub (crate) async fn dispatch_container(
         container: &Container,
         interaction: ComponentInteraction, 
-        ctx: ComponentContext,
+        ctx: InteractionContext,
         path: &str
-    ) -> BotResult<()> {
+    ) -> BotResult<CommandResponse> {
         let (child_id, path) = get_next_child(&path)?;
 
         let Some(child) = container.children.get(child_id) else {
@@ -133,16 +131,16 @@ impl ComponentDispatcher {
         match child {
             ContainerChild::ActionRow(action_row) => ComponentDispatcher::dispatch_action_row(action_row, interaction, ctx, path).await,
             ContainerChild::Section(section) => ComponentDispatcher::dispatch_section(section, interaction, ctx, path).await,
-            _ => Ok(())
+            _ => Ok(CommandResponse::empty())
         }
     }
 
     pub (crate) async fn dispatch_section(
         section: &Section,
         interaction: ComponentInteraction, 
-        ctx: ComponentContext,
+        ctx: InteractionContext,
         path: &str
-    ) -> BotResult<()> {
+    ) -> BotResult<CommandResponse> {
         let (child_id, path) = get_next_child(&path)?;
 
         let Some(accessory) = section.get_accessory() else {
@@ -167,6 +165,6 @@ impl ComponentDispatcher {
             _ => {}
         }
 
-        Ok(())
+        Ok(CommandResponse::empty())
     }
 }

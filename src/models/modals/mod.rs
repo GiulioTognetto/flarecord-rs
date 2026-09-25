@@ -1,25 +1,63 @@
 use std::sync::Arc;
 
 use dynosaur::dynosaur;
-use crate::error::BotResult;
-use crate::models::modals::context::ModalContext;
-use crate::models::modals::interaction::ModalInteraction;
+use twilight_model::{
+    application::interaction::InteractionContextType,
+    guild::Permissions,
+    oauth::ApplicationIntegrationType,
+};
 
-pub mod interaction;
-pub mod context;
+use crate::{
+    error::{BotResult, Error},
+    models::{
+        command::response::CommandResponse,
+        context::InteractionContext,
+        modals::interaction::ModalInteraction,
+    },
+};
+
 pub mod data;
+pub mod interaction;
+pub mod root;
+
+pub use crate::models::components::modal::{
+    FileUpload, Label, ModalSelect, TextDisplay, TextInput, TextInputStyle, TextStyle,
+};
+pub use root::{ModalComponent, RootModal};
 
 pub type ModalType = Arc<DynModal<'static>>;
 
+#[allow(async_fn_in_trait)]
 #[dynosaur(DynModal = dyn(box) Modal)]
 pub trait Modal: Send + Sync {
-    fn id(&self) -> String;
+    fn name(&self) -> String;
+    fn description(&self) -> String;
 
-    fn title(&self) -> String;
+    fn default_member_permissions(&self) -> Option<Permissions> {
+        None
+    }
 
-    fn components(&self) -> Vec<()>;
+    fn interaction_contexts(&self) -> Vec<InteractionContextType> {
+        vec![]
+    }
 
-    fn on_submit(&self, interaction: ModalInteraction, ctx: ModalContext) -> impl std::future::Future<Output = BotResult<()>> + Send;
+    fn integration_types(&self) -> Vec<ApplicationIntegrationType> {
+        vec![]
+    }
+
+    fn title(&self) -> String {
+        self.description()
+    }
+
+    fn build(&self, _root: &mut RootModal) {}
+
+    async fn on_submit(
+        &self,
+        _interaction: ModalInteraction,
+        _ctx: InteractionContext,
+    ) -> BotResult<CommandResponse> {
+        Err(Error::ExecuteNotImplemented(self.name()))
+    }
 }
 
 pub trait IntoModal {

@@ -44,7 +44,7 @@ Organized by feature, each document covers a specific part of the framework:
 | **Error Handling** | ✅ | Comprehensive error types with `thiserror` |
 | **WASM Optimized** | ✅ | Global distribution on Cloudflare Workers |
 | **Type Safety** | ✅ | Compile-time guarantees for Discord interactions |
-| **Message Components** | 🚧 | Buttons, dropdowns, modals (in development) |
+| **Message Components** | ✅ | Buttons, dropdowns, and Discord modals |
 | **Discord Gateway** | ❌ | Not supported (see Limitations) |
 
 ---
@@ -130,7 +130,7 @@ Below is a checklist of Discord API features and their support status in Flareco
 - [x] Command options (all types)
 - [x] Message components (buttons, select menus)
 - [x] Auto-complete suggestions
-- [ ] Modal submissions
+- [x] Modal submissions (TextInput, Label, and modal select menus)
 - [ ] Presence (REST endpoint)
 - [ ] Activities (REST endpoint)
 

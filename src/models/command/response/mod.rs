@@ -9,6 +9,7 @@ use twilight_model::{
     http::{
         interaction::{
             InteractionResponse as TwilightCommandResponse,
+            InteractionResponseData,
             InteractionResponseType
         }
     }
@@ -16,11 +17,11 @@ use twilight_model::{
 
 use crate::{
     models::{
-        attachment::outgoing::Attachment, command::response::builder::CommandResponseBuilder, components::{Component, id::{get_component_id, get_component_id_from_type_id}, layout::RootComponent}, embed::Embed
+        attachment::outgoing::Attachment, command::response::builder::CommandResponseBuilder, components::{Component, layout::RootComponent}, embed::Embed
     }, traits::component::{
         IntoComponent, 
         IntoTwilight
-    }
+    }, utils::get_id_from_type_id
 };
 
 pub mod builder;
@@ -62,6 +63,25 @@ impl CommandResponse {
         })
     }
 
+    pub fn modal<M: crate::models::modals::Modal + 'static>(modal: M) -> Self {
+        let mut root = crate::models::modals::RootModal::new();
+        modal.build(&mut root);
+
+        let components = root.into_components();
+
+        let modal_id = get_id_from_type_id(modal.type_id());
+
+        Self(TwilightCommandResponse {
+            kind: InteractionResponseType::Modal,
+            data: Some(InteractionResponseData {
+                custom_id: Some(modal_id),
+                components: Some(components),
+                title: Some(modal.title()),
+                ..Default::default()
+            }),
+        })
+    }
+
     /// Note: content will be ignored when using components V2
     pub fn set_content(&mut self, content: impl Into<String>) {
         self.0.data.get_or_insert_default().content = Some(content.into());
@@ -92,7 +112,7 @@ impl CommandResponse {
     pub fn add_component(&mut self, component: impl IntoComponent) {
         let component = component.into_component();
 
-        let component_id = get_component_id_from_type_id(component.type_id());
+        let component_id = get_id_from_type_id(component.type_id());
         let mut root = RootComponent::new();
         component.build(&mut root);
 
