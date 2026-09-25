@@ -33,7 +33,7 @@ fn generate_fn_command(func: ItemFn) -> TokenStream {
         
         pub struct #struct_name;
         impl Command for #struct_name {
-            async fn execute(&self, interaction: CommandInteraction, _ctx: CommandContext) -> BotResult<CommandResponse> {
+            async fn execute(&self, interaction: CommandInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
                 #name(interaction, _ctx).await
             }
         }
