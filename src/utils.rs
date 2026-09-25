@@ -2,7 +2,7 @@ use std::{any::TypeId, hash::{DefaultHasher, Hash, Hasher}};
 
 use worker::Headers;
 
-use crate::crypto::has_signature;
+use crate::signature::has_signature;
 
 #[allow(unused)]
 pub (crate) fn get_type_id<T: 'static>() -> String {

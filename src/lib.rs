@@ -1,4 +1,4 @@
-pub (crate) mod crypto;
+pub (crate) mod signature;
 pub (crate) mod utils;
 pub (crate) mod services;
 pub (crate) mod api;
