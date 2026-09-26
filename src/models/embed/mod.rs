@@ -11,6 +11,12 @@ pub mod video;
 
 pub struct Embed(TwilightEmbed);
 
+impl Default for Embed {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Embed {
     pub fn new() -> Self {
         Self(TwilightEmbed {
@@ -39,15 +45,15 @@ impl Embed {
     }
 
     pub fn set_title(&mut self, title: Option<String>) {
-        self.0.title = title.map(|s| s.into())
+        self.0.title = title
     }
 
     pub fn set_url(&mut self, url: Option<String>) {
-        self.0.url = url.map(|s| s.into())
+        self.0.url = url
     }
 
     pub fn set_description(&mut self, description: Option<String>) {
-        self.0.description = description.map(|s| s.into())
+        self.0.description = description
     }
 
     pub fn set_provider(&mut self, provider: Option<EmbedProvider>) {
@@ -71,7 +77,7 @@ impl Embed {
     }
 
     pub fn set_timestamp(&mut self, timestamp: Option<Timestamp>) {
-        self.0.timestamp = timestamp.into();
+        self.0.timestamp = timestamp;
     }
 
     pub fn add_field(&mut self, field: EmbedField) {

@@ -4,6 +4,12 @@ use super::CommandResponse;
 
 pub struct CommandResponseBuilder(CommandResponse);
 
+impl Default for CommandResponseBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CommandResponseBuilder {
     pub fn new() -> Self {
         Self(CommandResponse::new())

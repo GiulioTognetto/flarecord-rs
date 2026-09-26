@@ -18,7 +18,7 @@ pub (crate) mod commands;
 pub mod builder;
 pub mod state;
 
-pub (crate) static HTTP_CLIENT: LazyLock<Client> = LazyLock::new(|| Client::new());
+pub (crate) static HTTP_CLIENT: LazyLock<Client> = LazyLock::new(Client::new);
 static BOT: OnceLock<Arc<Bot>> = OnceLock::new();
 
 #[allow(unused)]
@@ -31,7 +31,7 @@ pub struct Bot {
 impl Bot {
     pub (crate) fn set_global(self) {
         let bot = Arc::new(self);
-        if let Err(_) = BOT.set(bot) {
+        if BOT.set(bot).is_err() {
             worker::console_warn!("Bot already initialized");
         }
     }

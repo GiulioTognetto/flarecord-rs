@@ -41,6 +41,12 @@ pub (crate) struct CommandResponseUpdate {
 #[derive(Debug)]
 pub struct CommandResponse(pub (crate) TwilightCommandResponse);
 
+impl Default for CommandResponse {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CommandResponse {
     pub fn new() -> Self {
         Self::empty()

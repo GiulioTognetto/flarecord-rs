@@ -7,8 +7,8 @@ pub struct EmbedProvider(TwilightEmbedProvider);
 impl EmbedProvider {
     pub fn new(name: Option<String>, url: Option<String>) -> Self {
         Self(TwilightEmbedProvider { 
-            name: name, 
-            url: url 
+            name, 
+            url 
         })
     }
 
@@ -27,8 +27,8 @@ impl From<TwilightEmbedProvider> for EmbedProvider {
     }
 }
 
-impl Into<TwilightEmbedProvider> for EmbedProvider {
-    fn into(self) -> TwilightEmbedProvider {
-        self.0
+impl From<EmbedProvider> for TwilightEmbedProvider {
+    fn from(val: EmbedProvider) -> Self {
+        val.0
     }
 }

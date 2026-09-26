@@ -27,15 +27,15 @@ impl EmbedImage {
     }
 }
 
-impl Into<EmbedImage> for &str {
-    fn into(self) -> EmbedImage {
-        EmbedImage::new(self)
+impl From<&str> for EmbedImage {
+    fn from(val: &str) -> Self {
+        EmbedImage::new(val)
     }
 }
 
-impl Into<EmbedImage> for String {
-    fn into(self) -> EmbedImage {
-        EmbedImage::new(self)
+impl From<String> for EmbedImage {
+    fn from(val: String) -> Self {
+        EmbedImage::new(val)
     }
 }
 
@@ -45,8 +45,8 @@ impl From<TwilightEmbedImage> for EmbedImage {
     }
 }
 
-impl Into<TwilightEmbedImage> for EmbedImage {
-    fn into(self) -> TwilightEmbedImage {
-        self.0
+impl From<EmbedImage> for TwilightEmbedImage {
+    fn from(val: EmbedImage) -> Self {
+        val.0
     }
 }

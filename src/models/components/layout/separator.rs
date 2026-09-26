@@ -11,6 +11,12 @@ use crate::traits::component::IntoTwilight;
 #[derive(Clone)]
 pub struct Separator(TwilightSeparator);
 
+impl Default for Separator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Separator {
     pub fn new() -> Self {
         Self(TwilightSeparator {

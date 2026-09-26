@@ -147,9 +147,9 @@ macro_rules! impl_action_row {
                 }
             }
 
-            impl Into<ActionRow> for ActionRowState<$state> {
-                fn into(self) -> ActionRow {
-                    ActionRow::$variant(self)
+            impl From<ActionRowState<$state>> for ActionRow {
+                fn from(val: ActionRowState<$state>) -> Self {
+                    ActionRow::$variant(val)
                 }
             }
         )*

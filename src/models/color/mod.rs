@@ -18,9 +18,9 @@ impl Color {
     }
 }
 
-impl Into<u32> for Color {
-    fn into(self) -> u32 {
-        self.0
+impl From<Color> for u32 {
+    fn from(val: Color) -> Self {
+        val.0
     }
 }
 

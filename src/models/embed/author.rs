@@ -21,14 +21,14 @@ impl EmbedAuthor {
     }
 }
 
-impl Into<TwilightEmbedAuthor> for EmbedAuthor {
-    fn into(self) -> TwilightEmbedAuthor {
-        self.0
+impl From<EmbedAuthor> for TwilightEmbedAuthor {
+    fn from(val: EmbedAuthor) -> Self {
+        val.0
     }
 }
 
-impl Into<EmbedAuthor> for TwilightEmbedAuthor {
-    fn into(self) -> EmbedAuthor {
-        EmbedAuthor(self)
+impl From<TwilightEmbedAuthor> for EmbedAuthor {
+    fn from(val: TwilightEmbedAuthor) -> Self {
+        EmbedAuthor(val)
     }
 }

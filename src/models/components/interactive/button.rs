@@ -22,9 +22,9 @@ pub enum ButtonStyle {
     Danger,
 }
 
-impl Into<TwilightButtonStyle> for ButtonStyle {
-    fn into(self) -> TwilightButtonStyle {
-        match self {
+impl From<ButtonStyle> for TwilightButtonStyle {
+    fn from(val: ButtonStyle) -> Self {
+        match val {
             ButtonStyle::Primary => TwilightButtonStyle::Primary,
             ButtonStyle::Secondary => TwilightButtonStyle::Secondary,
             ButtonStyle::Success => TwilightButtonStyle::Success,
@@ -54,6 +54,12 @@ pub struct ButtonKind<S> {
     pub (crate) inner: TwilightButton,
     pub(crate) handler: Option<Box<dyn InteractiveComponentHandler>>,
     pub (crate) _marker: PhantomData<S>
+}
+
+impl Default for ButtonKind<Empty> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl ButtonKind<Empty> {

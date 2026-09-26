@@ -84,10 +84,7 @@ impl CommandInteraction {
             }
         });
 
-        match new_data {
-            Some(inner) => Some(Self { data: inner, ..self }),
-            None => None,
-        }
+        new_data.map(|inner| Self { data: inner, ..self })
     }
 
     pub fn author<'a>(&'a self) -> Option<UserRef<'a>> {
@@ -133,7 +130,7 @@ impl CommandInteraction {
     pub async fn defer(&self, ephemeral: bool) -> BotResult<()> {
         let service = DISCORD_SERVICE.get().expect("DiscordService should be Some");
 
-        let is_edit = if self.message.is_some() { true } else { false };
+        let is_edit = self.message.is_some();
 
         service.defer(self.id, &self.token, is_edit, ephemeral).await?;
 
@@ -166,7 +163,7 @@ impl TryFrom<Interaction> for CommandInteraction {
             guild: value.guild.take(),
             guild_locale: value.guild_locale.take(),
             locale: value.locale.take().expect("Locale should be always available"),
-            data: data,
+            data,
             id: value.id,
             token: std::mem::take(&mut value.token),
             #[allow(deprecated)]

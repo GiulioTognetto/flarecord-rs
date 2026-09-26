@@ -78,7 +78,7 @@ pub (crate) trait IdAssignable {
 }
 
 pub (crate) fn assign_ids(component: &mut dyn IdAssignable, current_id: &mut HierarchicalId) {
-    component.set_id(&current_id);
+    component.set_id(current_id);
 
     for (i, child) in component.children().enumerate() {
         let mut child_id = current_id.clone();

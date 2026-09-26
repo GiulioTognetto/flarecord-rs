@@ -126,7 +126,7 @@ impl IntoTwilight<TwilightComponent> for MediaGallery {
 
         TwilightComponent::MediaGallery(TwilightMediaGallery {
             id: None,
-            items: items
+            items
         })
     }
 }

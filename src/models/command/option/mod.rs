@@ -25,7 +25,7 @@ impl CommandOption {
         Self {
             name: name.into(), 
             description: description.into(),
-            kind: kind,
+            kind,
             autocomplete: None,
             channel_types: None,
             required: None

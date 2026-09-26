@@ -16,8 +16,8 @@ pub struct InteractionContext {
 impl InteractionContext {
     pub fn new(bot: BotState, env: Env) -> BotResult<Self> {
         Ok(Self {
-            bot: bot, 
-            env: env,
+            bot, 
+            env,
             discord: DiscordService::get()?,
         })
     }

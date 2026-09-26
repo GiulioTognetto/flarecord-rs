@@ -43,8 +43,8 @@ impl From<f64> for AutocompleteValue {
     }
 }
 
-impl Into<CommandOptionChoiceValue> for AutocompleteValue {
-    fn into(self) -> CommandOptionChoiceValue {
-        self.0
+impl From<AutocompleteValue> for CommandOptionChoiceValue {
+    fn from(val: AutocompleteValue) -> Self {
+        val.0
     }
 }

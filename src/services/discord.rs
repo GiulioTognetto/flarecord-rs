@@ -28,13 +28,13 @@ impl DiscordService {
 
     pub (crate) fn get() -> BotResult<Arc<DiscordService>> {
         DISCORD_SERVICE.get()
-            .ok_or(Error::ServiceUnavailable(format!("Discord Service not initialized")))
+            .ok_or(Error::ServiceUnavailable("Discord Service not initialized".to_string()))
             .cloned()
     }
 
     pub (crate) fn new(token: String) -> Self {
         Self {
-            token: token
+            token
         }
     }
 
@@ -50,10 +50,10 @@ impl DiscordService {
         let bot = Bot::get_global();
         
         let serializable_commands: Vec<SerializableCommand<'_>> = bot.commands.values()
-            .map(|cmd| SerializableCommand(cmd))
+            .map(SerializableCommand)
             .collect();
 
-        let serialized_commands = serde_json::to_string(&serializable_commands).map_err(|e| Error::JsonFailed(e))?;
+        let serialized_commands = serde_json::to_string(&serializable_commands).map_err(Error::JsonFailed)?;
         
         let url = format!("{}/applications/{}/commands", BASE_URL, application_id);
         self.request(Method::PUT, url)
@@ -177,7 +177,7 @@ impl DiscordService {
         channel_id: Id<ChannelMarker>, 
         amount: u8
     ) -> BotResult<usize> {
-        if amount < 1 || amount > 100 {
+        if !(1..=100).contains(&amount) {
             return Err(Error::Generic("The delete takes between 1 and 100 messages.".into()));
         }
 
@@ -204,7 +204,7 @@ impl DiscordService {
         }
 
         if message_ids.len() == 1 {
-            let endpoint = format!("{}/channels/{}/messages/{}", BASE_URL, channel_id, &message_ids[0]);
+            let endpoint = format!("{}/channels/{}/messages/{}", BASE_URL, channel_id, message_ids[0]);
             self.request(Method::DELETE, endpoint)
                 .send()
                 .await?

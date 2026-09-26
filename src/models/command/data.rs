@@ -87,9 +87,7 @@ impl CommandData {
     }
 
     pub fn get_option(&self, name: &str) -> Option<CommandOptionValue> {
-        let Some(option) = self.0.options.iter().find(|opt| opt.name == name) else {
-            return None;
-        };
+        let option = self.0.options.iter().find(|opt| opt.name == name)?;
 
         Some(CommandOptionValue::from(&option.value))
     }

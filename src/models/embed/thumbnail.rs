@@ -44,8 +44,8 @@ impl From<TwilightEmbedThumbnail> for EmbedThumbnail {
     }
 }
 
-impl Into<TwilightEmbedThumbnail> for EmbedThumbnail {
-    fn into(self) -> TwilightEmbedThumbnail {
-        self.0
+impl From<EmbedThumbnail> for TwilightEmbedThumbnail {
+    fn from(val: EmbedThumbnail) -> Self {
+        val.0
     }
 }

@@ -17,9 +17,9 @@ impl EmbedFooter {
     }
 }
 
-impl Into<TwilightEmbedFooter> for EmbedFooter {
-    fn into(self) -> TwilightEmbedFooter {
-        self.0
+impl From<EmbedFooter> for TwilightEmbedFooter {
+    fn from(val: EmbedFooter) -> Self {
+        val.0
     }
 }
 

@@ -19,6 +19,12 @@ pub struct AutocompleteResponse {
     choices: Vec<CommandOptionChoice>
 }
 
+impl Default for AutocompleteResponse {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AutocompleteResponse {
     pub fn new() -> Self {
         Self { choices: Vec::new() }
@@ -33,12 +39,12 @@ impl AutocompleteResponse {
     }
 }
 
-impl Into<InteractionResponse> for AutocompleteResponse {
-    fn into(self) -> InteractionResponse {
+impl From<AutocompleteResponse> for InteractionResponse {
+    fn from(val: AutocompleteResponse) -> Self {
         InteractionResponse {
             kind: InteractionResponseType::ApplicationCommandAutocompleteResult,
             data: Some(InteractionResponseData {
-                choices: Some(self.choices),
+                choices: Some(val.choices),
                 ..Default::default()
             }),
         }

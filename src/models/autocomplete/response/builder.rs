@@ -5,6 +5,12 @@ use super::{AutocompleteResponse, AutocompleteValue};
 
 pub struct AutocompleteResponseBuilder(AutocompleteResponse);
 
+impl Default for AutocompleteResponseBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AutocompleteResponseBuilder {
     pub fn new() -> Self {
         Self(AutocompleteResponse::new())

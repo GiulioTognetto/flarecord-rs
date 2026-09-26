@@ -82,10 +82,7 @@ impl AutocompleteInteraction {
             }
         });
 
-        match new_data {
-            Some(inner) => Some(Self { data: inner, ..self }),
-            None => None,
-        }
+        new_data.map(|inner| Self { data: inner, ..self })
     }
 
     pub fn author<'a>(&'a self) -> Option<UserRef<'a>> {
@@ -118,7 +115,7 @@ impl TryFrom<Interaction> for AutocompleteInteraction {
             guild: value.guild.take(),
             guild_locale: value.guild_locale.take(),
             locale: value.locale.take().expect("Locale should be always available"),
-            data: data,
+            data,
             id: value.id,
             token: std::mem::take(&mut value.token),
             #[allow(deprecated)]

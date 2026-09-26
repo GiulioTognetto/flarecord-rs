@@ -1,9 +1,9 @@
-/// Quick Start Example - Flarecord Discord Bot
-/// 
-/// This example shows how to create a simple bot with inline command handlers.
-/// Perfect for getting started quickly without complex command structs.
-/// 
-/// See docs/COMMANDS.md and docs/BOT.md for more details.
+//! Quick Start Example - Flarecord Discord Bot
+//! 
+//! This example shows how to create a simple bot with inline command handlers.
+//! Perfect for getting started quickly without complex command structs.
+//! 
+//! See docs/COMMANDS.md and docs/BOT.md for more details.
 
 use worker::*;
 use flarecord::{bot::builder::BotBuilder, prelude::*};

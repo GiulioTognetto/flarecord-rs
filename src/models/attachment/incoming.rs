@@ -12,15 +12,15 @@ pub struct IncomingAttachmentRef<'a>(&'a TwilightIncomingAttachment);
 
 impl IncomingAttachment {
     pub fn is_image(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("image/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("image/"))
     }
 
     pub fn is_video(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("video/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("video/"))
     }
 
     pub fn is_audio(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("audio/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("audio/"))
     }
 
     pub fn is_landscape(&self) -> bool {
@@ -47,15 +47,15 @@ impl IncomingAttachment {
 
 impl<'a> IncomingAttachmentRef<'a> {
     pub fn is_image(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("image/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("image/"))
     }
 
     pub fn is_video(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("video/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("video/"))
     }
 
     pub fn is_audio(&self) -> bool {
-        self.content_type.as_ref().map_or(false, |ct| ct.starts_with("audio/"))
+        self.content_type.as_ref().is_some_and(|ct| ct.starts_with("audio/"))
     }
 
     pub fn is_landscape(&self) -> bool {
@@ -104,6 +104,6 @@ impl<'a> Deref for IncomingAttachmentRef<'a> {
     type Target = TwilightIncomingAttachment;
 
     fn deref(&self) -> &Self::Target {
-        &self.0
+        self.0
     }
 }

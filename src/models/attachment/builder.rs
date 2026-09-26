@@ -3,6 +3,12 @@ use crate::models::attachment::outgoing::Attachment;
 #[allow(unused)]
 pub struct AttachmentBuilder(Attachment);
 
+impl Default for AttachmentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AttachmentBuilder {
     pub fn new() -> Self {
         Self(Attachment::default())
@@ -23,8 +29,8 @@ impl AttachmentBuilder {
     }
 }
 
-impl Into<Attachment> for AttachmentBuilder {
-    fn into(self) -> Attachment {
-        self.build()
+impl From<AttachmentBuilder> for Attachment {
+    fn from(val: AttachmentBuilder) -> Self {
+        val.build()
     }
 }

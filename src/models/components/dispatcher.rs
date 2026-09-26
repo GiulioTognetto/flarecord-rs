@@ -85,23 +85,20 @@ impl ComponentDispatcher {
         ctx: InteractionContext,
         path: &str
     ) -> BotResult<CommandResponse> {
-        let (child_id, path) = get_next_child(&path)?;
+        let (child_id, path) = get_next_child(path)?;
 
         for child in action_row.get_children() {
             match child {
-                ActionRowChild::Button(button) => match button {
-                    Button::Normal(button) => {
-                        let Some(id) = button.inner.custom_id.as_ref() else {
-                            return Err(Error::InvalidInteraction(format!("Button has no custom_id")))
-                        };
+                ActionRowChild::Button(button) => if let Button::Normal(button) = button {
+                    let Some(id) = button.inner.custom_id.as_ref() else {
+                        return Err(Error::InvalidInteraction("Button has no custom_id".to_string()))
+                    };
 
-                        if !id.ends_with(&format!("{child_id}")) {
-                            continue
-                        }
+                    if !id.ends_with(&format!("{child_id}")) {
+                        continue
+                    }
 
-                        return button.clicked(interaction, ctx).await
-                    },
-                    _ => {}
+                    return button.clicked(interaction, ctx).await
                 },
                 ActionRowChild::Select(select) => {
                     if !select.get_custom_id().ends_with(&format!("{child_id}")) {
@@ -122,10 +119,10 @@ impl ComponentDispatcher {
         ctx: InteractionContext,
         path: &str
     ) -> BotResult<CommandResponse> {
-        let (child_id, path) = get_next_child(&path)?;
+        let (child_id, path) = get_next_child(path)?;
 
         let Some(child) = container.children.get(child_id) else {
-            return Err(Error::InvalidInteraction(format!("action_row child not found!")))?;
+            return Err(Error::InvalidInteraction("action_row child not found!".to_string()))?;
         };
 
         match child {
@@ -141,28 +138,22 @@ impl ComponentDispatcher {
         ctx: InteractionContext,
         path: &str
     ) -> BotResult<CommandResponse> {
-        let (child_id, path) = get_next_child(&path)?;
+        let (child_id, path) = get_next_child(path)?;
 
         let Some(accessory) = section.get_accessory() else {
-            return Err(Error::InvalidInteraction(format!("action_row child not found!")))?;
+            return Err(Error::InvalidInteraction("action_row child not found!".to_string()))?;
         };
 
-        match accessory {
-            SectionAccessory::Button(button) => match button {
-                Button::Normal(button) => {
-                    let Some(id) = &button.inner.custom_id else {
-                        return Err(Error::InvalidInteraction(format!("Button has no custom_id")))
-                    };
+        if let SectionAccessory::Button(Button::Normal(button)) = accessory {
+            let Some(id) = &button.inner.custom_id else {
+                return Err(Error::InvalidInteraction("Button has no custom_id".to_string()))
+            };
 
-                    if !id.ends_with(&format!("{child_id}")) {
-                        return Err(Error::InvalidInteraction(format!("Button has an invalid custom_id")))
-                    }
+            if !id.ends_with(&format!("{child_id}")) {
+                return Err(Error::InvalidInteraction("Button has an invalid custom_id".to_string()))
+            }
 
-                    return button.clicked(interaction, ctx).await
-                },
-                _ => {}
-            },
-            _ => {}
+            return button.clicked(interaction, ctx).await
         }
 
         Ok(CommandResponse::empty())

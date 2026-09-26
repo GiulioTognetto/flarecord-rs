@@ -65,7 +65,7 @@ pub enum Error {
     #[error("Execute not implemented for command: '{0}'")]
     ExecuteNotImplemented(String),
 
-    #[error("Autocomplete not implemented for comand: '{0}'")]
+    #[error("Autocomplete not implemented for command: '{0}'")]
     AutocompleteNotImplemented(String),
 
     #[error("Error communicating with {0}")]
@@ -103,7 +103,7 @@ impl Error {
 
 impl From<Error> for worker::Error {
     fn from(value: Error) -> Self {
-        Self::from(format!("[rsflarecord] Error: {:?}", value))
+        Self::from(format!("[flarecord] Error: {:?}", value))
     }
 }
 

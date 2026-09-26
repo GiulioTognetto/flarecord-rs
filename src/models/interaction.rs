@@ -51,7 +51,7 @@ impl Interaction {
         let bot = Bot::get_global();
 
         let Some(command) = bot.commands.get(&command_interaction.data.0.name) else {
-            return Err(Error::CommandNotFound(format!("{}", command_interaction.data.0.name)))
+            return Err(Error::CommandNotFound(command_interaction.data.0.name.to_string()))
         };
 
         let bot_state = BotState::new(bot.clone());
@@ -76,7 +76,7 @@ impl Interaction {
 
         let bot = Bot::get_global();
         let Some(command) = bot.commands.get(&autocomplete_interaction.data.0.name) else {
-            return Err(Error::CommandNotFound(format!("{}", autocomplete_interaction.data.0.name)))
+            return Err(Error::CommandNotFound(autocomplete_interaction.data.0.name.to_string()))
         };
 
         let bot_state = BotState::new(bot.clone());
@@ -100,7 +100,7 @@ impl Interaction {
 
         let bot = Bot::get_global();
         let Some(modal) = bot.modals.get(&modal_interaction.data.custom_id) else {
-            return Err(Error::ModalNotFound(format!("{}", modal_interaction.data.custom_id)))
+            return Err(Error::ModalNotFound(modal_interaction.data.custom_id.to_string()))
         };
 
         let bot_state = BotState::new(bot.clone());
@@ -137,7 +137,7 @@ Err(e) => {
         };
 
         let Some(component) = bot.components.get(root_component_id) else {
-            return Err(Error::ComponentNotFound(format!("{}", component_interaction.data.custom_id)))
+            return Err(Error::ComponentNotFound(component_interaction.data.custom_id.to_string()))
         };
 
         let bot_state = BotState::new(bot.clone());

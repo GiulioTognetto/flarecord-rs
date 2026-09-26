@@ -4,6 +4,12 @@ use crate::traits::component::{IntoTwilight};
 
 pub struct TextDisplay(TwilightTextDisplay);
 
+impl Default for TextDisplay {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TextDisplay {
     pub fn new() -> Self {
         Self(TwilightTextDisplay {
@@ -36,7 +42,7 @@ impl TextDisplay {
     }
 
     pub fn newline(mut self) -> Self {
-        self.0.content.push_str("\n");
+        self.0.content.push('\n');
         self
     }
 }

@@ -89,7 +89,7 @@ impl TryFrom<Interaction> for ModalInteraction {
             guild: value.guild.take(),
             guild_locale: value.guild_locale.take(),
             locale: value.locale.take().unwrap_or_else(|| "en-US".into()),
-            data: data,
+            data,
             id: value.id,
             token: std::mem::take(&mut value.token),
             #[allow(deprecated)]

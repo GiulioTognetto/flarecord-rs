@@ -36,13 +36,13 @@ impl From<TwilightUser> for User {
 
 impl<'a> From<&'a TwilightUser> for UserRef<'a> {
     fn from(value: &'a TwilightUser) -> Self {
-        Self(&value)
+        Self(value)
     }
 }
 
 impl<'a> From<&'a User> for UserRef<'a> {
     fn from(value: &'a User) -> Self {
-        Self(&value)
+        Self(value)
     }
 }
 
@@ -58,7 +58,7 @@ impl<'a> Deref for UserRef<'a> {
     type Target = TwilightUser;
 
     fn deref(&self) -> &Self::Target {
-        &self.0
+        self.0
     }
 }
 
@@ -68,6 +68,6 @@ impl Resolvable<User> for Id<UserMarker> {
             .get()
             .ok_or(Error::Generic("Discord Service not initiliazed!".into()))?;
 
-        Ok(discord.fetch_user(self).await?)
+        discord.fetch_user(self).await
     }
 }

@@ -16,7 +16,7 @@ impl Thumbnail {
         Self(TwilightThumbnail {
             id: None,
             media: UnfurledMediaItem {
-                url: url,
+                url,
                 proxy_url: None,
                 height: None,
                 width: None,

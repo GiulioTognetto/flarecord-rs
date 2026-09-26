@@ -81,7 +81,7 @@ impl Select {
                 custom_id: String::new(),
                 default_values: None,
                 disabled: false,
-                kind: kind,
+                kind,
                 max_values: None,
                 min_values: None,
                 options: Some(vec![]),

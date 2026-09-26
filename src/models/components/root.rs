@@ -13,6 +13,12 @@ pub struct RootComponent {
     pub(crate) children: Vec<LayoutComponent>,
 }
 
+impl Default for RootComponent {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl RootComponent {
     pub fn new() -> Self {
         Self {

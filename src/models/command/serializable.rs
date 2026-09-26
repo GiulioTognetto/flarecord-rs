@@ -22,7 +22,7 @@ fn serialize_subcommands<S>(
             .map_err(|e| SerdeError::custom(format!("Error parsing options: {e}")))?
             .unwrap_or_default()
             .iter()
-            .map(|opt| TwilightCommandOption::from(opt))
+            .map(TwilightCommandOption::from)
             .collect();
 
         let autocomplete = options
@@ -33,7 +33,7 @@ fn serialize_subcommands<S>(
             kind: CommandOptionType::SubCommand,
             name: subcommand.name(),
             description: subcommand.description(),
-            options: if options.len() > 0 { Some(options) } else { None },
+            options: if !options.is_empty() { Some(options) } else { None },
             autocomplete: if autocomplete { Some(true) } else { None },
             channel_types: None,
             choices: None,
@@ -58,7 +58,7 @@ impl<'a> Serialize for SerializableCommand<'a> {
             .map_err(|e| SerdeError::custom(format!("Error parsing options: {e}")))?
             .unwrap_or_default()
             .iter()
-            .map(|opt| TwilightCommandOption::from(opt))
+            .map(TwilightCommandOption::from)
             .collect();
 
         let groups = self.0.groups();

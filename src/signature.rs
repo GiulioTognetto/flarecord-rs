@@ -18,13 +18,21 @@ pub (crate) fn verify_signature(headers: &Headers, body: &[u8], public_key_hex: 
     let public_key_bytes = hex::decode(public_key_hex)
         .map_err(Error::ParseHexFailed)?;
 
-    let verifying_key = VerifyingKey::from_bytes(&public_key_bytes.try_into().unwrap_or([0; 32]))
+    let public_key_array: [u8; 32] = public_key_bytes
+        .try_into()
+        .map_err(|_| Error::InvalidPayload("Invalid public key length, expected 32 bytes".into()))?;
+
+    let verifying_key = VerifyingKey::from_bytes(&public_key_array)
         .map_err(Error::CryptoError)?;
 
     let signature_bytes = hex::decode(signature_header)
         .map_err(Error::ParseHexFailed)?;
 
-    let signature = Signature::from_bytes(&signature_bytes.try_into().unwrap_or([0; 64]));
+    let signature_array: [u8; 64] = signature_bytes
+        .try_into()
+        .map_err(|_| Error::InvalidPayload("Invalid signature length, expected 64 bytes".into()))?;
+
+    let signature = Signature::from_bytes(&signature_array);
 
     let mut message = Vec::with_capacity(timestamp_header.len() + body.len());
     message.extend_from_slice(timestamp_header.as_bytes());

@@ -23,6 +23,12 @@ pub struct BotBuilder {
     pub (crate) modals: HashMap<String, ModalType>
 }
 
+impl Default for BotBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BotBuilder {
     pub fn new() -> Self {
         Self {

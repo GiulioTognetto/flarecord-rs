@@ -1,4 +1,4 @@
-use flarecord::{models::components::content::text_display::TextDisplay, prelude::*};
+use flarecord::prelude::*;
 use twilight_model::channel::message::component::SelectMenuOption;
 
 pub struct TicketModal;
@@ -48,8 +48,7 @@ impl Modal for TicketModal {
         root.add(Label::new("Priority", proirity));
     }
 
-    async fn on_submit(&self, interaction: ModalInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
-
+    async fn on_submit(&self, _interaction: ModalInteraction, _ctx: InteractionContext) -> BotResult<CommandResponse> {
         Ok(CommandResponse::empty())
     }
 }

@@ -46,11 +46,10 @@ impl LayoutComponentHandler {
 
 impl Component for LayoutComponentHandler {
     fn build(&self, root: &mut RootComponent) {
-        if let Ok(mut lock) = self.0.lock() {
-            if let Some(layout) = lock.take() {
+        if let Ok(mut lock) = self.0.lock()
+            && let Some(layout) = lock.take() {
                 root.add(layout);
             }
-        }
     }
 
     async fn handle(

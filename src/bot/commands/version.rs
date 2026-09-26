@@ -20,9 +20,9 @@ impl Subcommand for VersionCommand {
             worker::console_warn!("WORKER_METADATA_BINDING env variable not set!");
 
             let mut embed = Embed::new();
-            embed.set_title(Some(format!("Bot version information")));
+            embed.set_title(Some("Bot version information".to_string()));
             embed.set_color(Some(Color::from_rgb(255, 0, 0)));
-            embed.set_description(Some(format!("An error occurred while gathering bot version information!")));
+            embed.set_description(Some("An error occurred while gathering bot version information!".to_string()));
 
             let response = CommandResponse::builder()
                 .embed(embed)
@@ -41,14 +41,14 @@ impl Subcommand for VersionCommand {
         let tag = metadata.tag();
 
         let date = worker::Date::new(worker::DateInit::String(datetime.clone()));
-        let timestamp = (date.as_millis() / 1000) as u64;
+        let timestamp = date.as_millis() / 1000;
 
 
         let text_display = TextDisplay::new()
             .heading(1, "Bot version information")
             .newline()
             .bold("Build Id:")
-            .paragraph(&format!("`{id}`"))
+            .paragraph(format!("`{id}`"))
             .newline()
             .bold("Build Tag:")
             .paragraph(if tag.is_empty() { "`<undefined>`".into() } else { format!("`{tag}`") })

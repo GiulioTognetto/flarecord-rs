@@ -32,22 +32,22 @@ impl ComponentData {
     }
 
     /// Retrieves a resolved member by id.
-    pub fn get_resolved_member<'a>(&'a self, id: Id<UserMarker>) -> Option<&'a InteractionMember> {
+    pub fn get_resolved_member(&self, id: Id<UserMarker>) -> Option<&InteractionMember> {
         self.0.resolved.as_ref()?.members.get(&id)
     }
 
     /// Retrieves a resolved role by id.
-    pub fn get_resolved_role<'a>(&'a self, id: Id<RoleMarker>) -> Option<&'a Role> {
+    pub fn get_resolved_role(&self, id: Id<RoleMarker>) -> Option<&Role> {
         self.0.resolved.as_ref()?.roles.get(&id)
     }
 
     /// Retrieves a resolved message by id.
-    pub fn get_resolved_message<'a>(&'a self, id: Id<MessageMarker>) -> Option<&'a Message> {
+    pub fn get_resolved_message(&self, id: Id<MessageMarker>) -> Option<&Message> {
         self.0.resolved.as_ref()?.messages.get(&id.cast())
     }
 
     /// Retrieves a resolved channel by id.
-    pub fn get_resolved_channel<'a>(&'a self, id: Id<ChannelMarker>) -> Option<&'a InteractionChannel> {
+    pub fn get_resolved_channel(&self, id: Id<ChannelMarker>) -> Option<&InteractionChannel> {
         self.0.resolved.as_ref()?.channels.get(&id)
     }
 
