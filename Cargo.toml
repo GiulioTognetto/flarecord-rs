@@ -36,7 +36,7 @@ inventory = "0.3"
 worker = "^0.8"
 reqwest = { version = "^0.13", features = [ "json" ] }
 
-twilight-model = { version = "^0.17", default-features = false }
+twilight-model = { version = "^0.18", default-features = false }
 #twilight-validate = { version = "^0.17", default-features = false }
 #twilight-util = { version = "^0.17", features = ["full"] }
 
