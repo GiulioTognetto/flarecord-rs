@@ -12,6 +12,7 @@ impl FileUpload {
             max_values: None,
             min_values: None,
             required: None,
+            file_types: None
         })
     }
 
@@ -27,6 +28,11 @@ impl FileUpload {
 
     pub fn required(mut self, required: bool) -> Self {
         self.0.required = Some(required);
+        self
+    }
+
+    pub fn allowed_file_types(mut self, file_types: Vec<String>) -> Self {
+        self.0.file_types = Some(file_types);
         self
     }
 }

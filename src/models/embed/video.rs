@@ -1,4 +1,4 @@
-use twilight_model::channel::message::embed::EmbedVideo as TwilightEmbedVideo;
+use twilight_model::channel::message::embed::{EmbedMediaFlags, EmbedVideo as TwilightEmbedVideo};
 
 
 pub struct EmbedVideo(TwilightEmbedVideo);
@@ -15,7 +15,11 @@ impl EmbedVideo {
             height: None,
             width: None,
             proxy_url: None,
-            url: None
+            url: None,
+            content_type: None,
+            placeholder: None,
+            placeholder_version: None,
+            flags: None
         })
     }
 
@@ -29,6 +33,21 @@ impl EmbedVideo {
 
     pub fn set_width(&mut self, width: impl Into<Option<u64>>) {
         self.0.height = width.into()
+    }
+    pub fn set_placeholder(&mut self, placeholder: impl Into<Option<String>>) {
+        self.0.placeholder = placeholder.into()
+    }
+
+    pub fn set_placeholder_version(&mut self, placeholder_version: impl Into<Option<u64>>) {
+        self.0.placeholder_version = placeholder_version.into()
+    }
+
+    pub fn set_content_type(&mut self, content_type: impl Into<Option<String>>) {
+        self.0.content_type = content_type.into()
+    }
+
+    pub fn set_flags(&mut self, flags: EmbedMediaFlags) {
+        self.0.flags = Some(flags);
     }
 }
 

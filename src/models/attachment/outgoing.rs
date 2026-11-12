@@ -3,64 +3,66 @@ use twilight_model::http::attachment::Attachment as TwilightOutgoingAttachment;
 use crate::traits::component::IntoTwilight;
 
 #[allow(unused)]
-pub struct Attachment {
-    filename: String,
-    description: Option<String>,
-    file: Option<Vec<u8>>,
-    id: u64
-}
+pub struct Attachment(TwilightOutgoingAttachment);
 
 #[allow(unused)]
 impl Attachment {
     pub fn new(filename: impl Into<String>) -> Self {
-        Self { 
+        Self(TwilightOutgoingAttachment {
+            title: None,
             filename: filename.into(),
-            ..Default::default()
-        }
+            duration_secs: None,
+            description: None,
+            is_spoiler: None,
+            waveform: None,
+            file: vec![],
+            id: 0
+        })
+    }
+
+    pub fn set_title(&mut self, title: impl Into<String>) {
+        self.0.title = Some(title.into());
     }
 
     pub fn set_description(&mut self, description: impl Into<String>) {
-        self.description = Some(description.into());
+        self.0.description = Some(description.into());
     }
 
     pub fn set_content(&mut self, content: impl Into<Vec<u8>>) {
-        self.file = Some(content.into())
+        self.0.file = content.into()
+    }
+
+    pub fn set_waveform(&mut self, waveform: String) {
+        self.0.waveform = Some(waveform)
+    }
+
+    pub fn set_duration_secs(&mut self, duration: f64) {
+        self.0.duration_secs = Some(duration)
+    }
+
+    pub fn set_is_spoiler(&mut self, is_spoiler: bool) {
+        self.0.is_spoiler = Some(is_spoiler)
     }
 
     pub (crate) fn set_id(&mut self, id: u64) {
-        self.id = id
+        self.0.id = id
     }
 }
 
 impl Default for Attachment {
     fn default() -> Self {
-        Self {
-            filename: "empty.file".into(),
-            description: None,
-            file: None,
-            id: 0
-        }
+        Self::new("empty-file")
     }
 }
 
 impl IntoTwilight<TwilightOutgoingAttachment> for Attachment {
     fn into_twilight(self) -> TwilightOutgoingAttachment {
-        TwilightOutgoingAttachment {
-            description: self.description,
-            file: self.file.unwrap_or(vec![]),
-            filename: self.filename,
-            id: self.id
-        }
+        self.0
     }
 }
 
 impl From<TwilightOutgoingAttachment> for Attachment {
     fn from(value: TwilightOutgoingAttachment) -> Self {
-        Self {
-            filename: value.filename,
-            file: Some(value.file),
-            description: value.description,
-            id: value.id
-        }
+        Self(value)
     }
 }

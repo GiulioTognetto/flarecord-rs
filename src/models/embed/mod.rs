@@ -1,4 +1,4 @@
-use twilight_model::{channel::message::{Embed as TwilightEmbed, embed::EmbedField}, util::Timestamp};
+use twilight_model::{channel::message::{Embed as TwilightEmbed, embed::{EmbedField, EmbedFlags}}, util::Timestamp};
 
 use crate::{models::{color::Color, embed::{author::EmbedAuthor, footer::EmbedFooter, image::EmbedImage, provider::EmbedProvider, thumbnail::EmbedThumbnail, video::EmbedVideo}}, traits::component::IntoTwilight};
 
@@ -32,7 +32,8 @@ impl Embed {
             timestamp: None,
             title: None,
             url: None,
-            video: None
+            video: None,
+            flags: None
         })
     }
 
@@ -78,6 +79,10 @@ impl Embed {
 
     pub fn set_timestamp(&mut self, timestamp: Option<Timestamp>) {
         self.0.timestamp = timestamp;
+    }
+
+    pub fn set_flags(&mut self, flags: EmbedFlags) {
+        self.0.flags = Some(flags);
     }
 
     pub fn add_field(&mut self, field: EmbedField) {

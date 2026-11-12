@@ -129,6 +129,7 @@ impl From<CommandOption> for TwilightCommandOption {
             max_value: None,
             min_length: None,
             min_value: None,
+            file_types: None
         }
     }
 }
@@ -150,6 +151,7 @@ impl From<&CommandOption> for TwilightCommandOption {
             max_value: None,
             min_length: None,
             min_value: None,
+            file_types: None
         }
     }
 }
