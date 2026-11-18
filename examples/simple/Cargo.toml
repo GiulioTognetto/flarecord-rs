@@ -8,7 +8,7 @@ authors = ["GitGinocchio <106624847+GitGinocchio@users.noreply.github.com>"]
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = { version = "0.8" }
+worker = { version = "0.9" }
 worker-macros = { version = "0.8" }
 
 async-trait = "0.1.89"

@@ -33,7 +33,7 @@ macros = ["dep:flarecord-macros"]
 flarecord-macros = { path = "./flarecord-macros", optional = true }
 inventory = "0.3"
 
-worker = "^0.8"
+worker = "^0.9"
 reqwest = { version = "^0.13", features = [ "json" ] }
 
 twilight-model = { version = "^0.18", default-features = false }
