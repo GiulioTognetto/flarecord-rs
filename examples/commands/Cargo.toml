@@ -11,6 +11,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 worker = { version = "0.9.0" }
-worker-macros = { version = "0.8.5" }
+worker-macros = { version = "0.9.0" }
 
 flarecord = { path = "../../" }
